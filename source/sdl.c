@@ -12,6 +12,9 @@
 static SDL_Window *main_window;
 static SDL_Renderer *main_renderer;
 
+TTF_Font *fntSmall, *fntMedium, *fntLarge, *fntButton, *fntButtonBig;
+SDL_Texture *background, *app_icon, *ams_icon, *ams_plus_icon, *reboot_icon, *hekate_icon, *error_icon;
+
 SDL_Colour colours[] = {
     { 255, 255, 255 },          //white
     { 140, 140, 140, 255 },     //grey
@@ -126,9 +129,12 @@ void loadFonts()
 
 void loadTextures()
 {
-    imageLoad(&background,      "romfs:/background.png");
+    imageLoad(&background,      "romfs:/ams_background.png");
     imageLoad(&app_icon,        "romfs:/app_icon.png");
-    imageLoad(&re_icon,        "romfs:/re_icon.png");
+    imageLoad(&ams_icon,        "romfs:/ams_icon.png");
+    imageLoad(&ams_plus_icon,   "romfs:/ams_plus_icon.png");
+    imageLoad(&reboot_icon,     "romfs:/reboot_icon.png");
+    imageLoad(&hekate_icon,     "romfs:/hekate_icon.png");
     imageLoad(&error_icon,      "romfs:/error_icon.png");
 }
 
@@ -142,7 +148,10 @@ void destroyTextures()
 
     SDL_DestroyTexture(background);
     SDL_DestroyTexture(app_icon);
-    SDL_DestroyTexture(re_icon);
+    SDL_DestroyTexture(ams_icon);
+    SDL_DestroyTexture(ams_plus_icon);
+    SDL_DestroyTexture(reboot_icon);
+    SDL_DestroyTexture(hekate_icon);
     SDL_DestroyTexture(error_icon);
 }
 
@@ -152,7 +161,7 @@ void sdlInit()
     SDL_Init(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 
-    main_window = SDL_CreateWindow("splatgian", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
+    main_window = SDL_CreateWindow("totaljustice", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_W, SCREEN_H, SDL_WINDOW_SHOWN);
     main_renderer = SDL_CreateRenderer(main_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     // highest quality

@@ -27,7 +27,7 @@ int unzip(const char *output, int mode)
         unzOpenCurrentFile(zfile);
         unzGetCurrentFileInfo(zfile, &file_info, filename_inzip, sizeof(filename_inzip), NULL, 0, NULL, 0);
 
-        if (mode == DL_EU && strstr(filename_inzip, ".ini"))
+        if (strstr(filename_inzip, ".ini"))
         {
             // check if file exists, if not, create one anyway
             FILE *f = fopen(filename_inzip, "r");
@@ -58,7 +58,7 @@ int unzip(const char *output, int mode)
             void *buf = malloc(WRITEBUFFERSIZE);
 
             FILE *outfile;
-            if (mode == UP_HEKATE && strstr(filename_inzip, ".bin")) outfile = fopen("/atmosphere/reboot_payload.bin", "wb");
+            if (strstr(filename_inzip, ".bin")) outfile = fopen("/atmosphere/reboot_payload.bin", "wb");
             else outfile = fopen(write_filename, "wb");
 
             drawText(fntSmall, 350, 350, SDL_GetColour(white), write_filename);

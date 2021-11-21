@@ -53,8 +53,8 @@
 #define BUTTON_L3           0xE104
 #define BUTTON_R3           0xE105
 
-TTF_Font *fntSmall, *fntMedium, *fntLarge, *fntButton, *fntButtonBig;
-SDL_Texture *background, *app_icon, *re_icon, *error_icon;
+extern TTF_Font *fntSmall, *fntMedium, *fntLarge, *fntButton, *fntButtonBig;
+extern SDL_Texture *background, *app_icon, *ams_icon, *ams_plus_icon, *reboot_icon, *hekate_icon, *error_icon;
 
 
 SDL_Colour SDL_GetColour(int colour_option);                                        //pass the name of colour, returns the colour

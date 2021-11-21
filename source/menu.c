@@ -5,7 +5,7 @@
 #include "touch.h"
 #include "util.h"
 
-#define APP_VERSION "Rainbow Expansion Installer: 0.1.0"
+#define APP_VERSION "nro-test: 0.1.0"
 
 void refreshScreen(char loaded)
 {
@@ -13,12 +13,6 @@ void refreshScreen(char loaded)
 
     // app version.
     drawText(fntMedium, 40, 40, SDL_GetColour(white), APP_VERSION);
-
-    // system version.
-    drawText(fntSmall, 25, 150, SDL_GetColour(white), getSysVersion());
-
-    // atmosphere version.
-    drawText(fntSmall, 25, 230, SDL_GetColour(white), getAmsVersion());
 
     if (loaded)
     {
@@ -35,23 +29,17 @@ void printOptionList(int cursor)
 {
     refreshScreen(/*loaded=*/1);
 
-    char *option_list[]      = {    "Download EU mod", \
-                                    "Download JP mod", \
-                                    "Download US mod", \
-                                    "Download WIP EU mod", \
-                                    "Download WIP JP mod", \
-                                    "Download WIP US mod", \
+    char *option_list[]      = {    "Download european mod", \
+                                    "Download japanese mod", \
+                                    "Download american mod", \
                                     "Update app" };
 
-    char *description_list[] = {    "Download european version of the mod", \
-                                    "Download japanese version of the mod", \
-                                    "Download american version of the mod", \
-                                    "Download work-in-progress european version of the mod", \
-                                    "Download work-in-progress japanese version of the mod", \
-                                    "Download work-in-progress american version of the mod", \
-                                    "Update the installer" };
+    char *description_list[] = {    "Downloades the mod for european Splatoon 2", \
+                                    "Downloades the mod for japanese Splatoon 2", \
+                                    "Downloades the mod for american Splatoon 2", \
+                                    "Update app and removes old version" };
 
-    SDL_Texture *textureArray[] = { re_icon, app_icon };
+    SDL_Texture *textureArray[] = { ams_icon, ams_plus_icon, hekate_icon, app_icon, reboot_icon };
 
     for (int i=0, nl=0; i < (CURSOR_LIST_MAX+1); i++, nl+=NEWLINE)
     {
@@ -97,29 +85,33 @@ int yesNoBox(int mode, int x, int y, char *question)
 
     int res = 0;
     int touch_lock = OFF;
-    touchPosition touch;
-    u32 tch = 0;
-    u32 touch_count = hidTouchCount();
+    // touchPosition touch;
+    // u32 tch = 0;
+    HidTouchScreenState state={0};
+
+    u32 touch_count = hidGetTouchScreenStates(&state, 1);
 
     // check if the user is already touching the screen.
     if (touch_count > 0) touch_lock = ON;
 
+    PadState pad;
+    padInitializeDefault(&pad);
+
     while (1)
     {
-        hidScanInput();
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        hidTouchRead(&touch, tch);
-        touch_count = hidTouchCount();
+        padUpdate(&pad);
+        u64 kDown = padGetButtonsDown(&pad);
+        touch_count = hidGetTouchScreenStates(&state, 1);
 
         if (touch_count == 0) touch_lock = OFF;
 
         if (touch_count > 0 && touch_lock == OFF)
-            res = touch_yes_no_option(touch.px, touch.py);
+            res = touch_yes_no_option(state.touches[0].x, state.touches[0].y);
 
-        if (kDown & KEY_A || res == YES)
+        if (kDown & HidNpadButton_A || res == YES)
             return YES;
 
-        if (kDown & KEY_B || res == NO)
+        if (kDown & HidNpadButton_B || res == NO)
             return NO;
     }
 }

@@ -23,10 +23,7 @@ int appInit()
         printf("nxlinkStdio() failed: 0x%x.\n\n", rc);
     #endif
 
-    if (R_FAILED(rc = setsysInitialize()))                  // for system version
-        printf("setsysInitialize() failed: 0x%x.\n\n", rc);
-
-    if (R_FAILED(rc = plInitialize()))                      // for shared fonts.
+    if (R_FAILED(rc = plInitialize(PlServiceType_User)))    // for shared fonts.
         printf("plInitialize() failed: 0x%x.\n\n", rc);
 
     if (R_FAILED(rc = romfsInit()))                         // load textures from app.
@@ -61,71 +58,61 @@ int main(int argc, char **argv)
     // touch variables.
     int touch_lock = OFF;
     u32 tch = 0;
-    touchPosition touch;
+    HidTouchScreenState state={0};
+
+    padConfigureInput(1, HidNpadStyleSet_NpadStandard);
+
+    PadState pad;
+    padInitializeDefault(&pad);
+    u32 touch_count = hidGetTouchScreenStates(&state, 1);
 
     // muh loooooop
     while(appletMainLoop())
     {
-        // scan for button / touch input each frame.
-        hidScanInput();
-        u64 kDown = hidKeysDown(CONTROLLER_P1_AUTO);
-        hidTouchRead(&touch, tch);
-        u32 touch_count = hidTouchCount();
+        padUpdate(&pad);
+        u64 kDown = padGetButtonsDown(&pad);
+
+        u32 touch_count = hidGetTouchScreenStates(&state, 1);
 
         // main menu display
         printOptionList(cursor);
 
         // move cursor down...
-        if (kDown & KEY_DOWN)
+        if (kDown & HidNpadButton_Down)
         {
             if (cursor == CURSOR_LIST_MAX) cursor = 0;
             else cursor++;
         }
 
         // move cursor up...
-        if (kDown & KEY_UP)
+        if (kDown & HidNpadButton_Up)
         {
             if (cursor == 0) cursor = CURSOR_LIST_MAX;
             else cursor--;
         }
 
         // select option
-        if (kDown & KEY_A || (touch_lock == OFF && touch.px > 530 && touch.px < 1200 && touch.py > FIRST_LINE - HIGHLIGHT_BOX_MIN && touch.py < (NEWLINE * CURSOR_LIST_MAX) + FIRST_LINE + HIGHLIGHT_BOX_MAX))
+        if (kDown & HidNpadButton_A || (touch_lock == OFF && state.touches[0].x > 530 && state.touches[0].x < 1200 && state.touches[0].y > FIRST_LINE - HIGHLIGHT_BOX_MIN && state.touches[0].y < (NEWLINE * CURSOR_LIST_MAX) + FIRST_LINE + HIGHLIGHT_BOX_MAX))
         {
             // check if the user used touch to enter this option.
             if (touch_lock == OFF && touch_count > 0)
-                cursor = touch_cursor(touch.px, touch.py);
+                cursor = touch_cursor(state.touches[0].x, state.touches[0].y);
 
             switch (cursor)
             {
             case DL_EU:
-                if (yesNoBox(cursor, 390, 250, "Download european mod?") == YES)
-                    update_ams_hekate(EU_URL, EU_OUTPUT, cursor);
+                if (yesNoBox(cursor, 390, 250, "Download mod for european Splatoon 2?") == YES)
+                    download_eu_jp_us(EU_URL, EU_OUTPUT, cursor);
                 break;
 
             case DL_JP:
-                if (yesNoBox(cursor, 390, 250, "Download japanese mod?") == YES)
-                    update_ams_hekate(JP_URL, JP_OUTPUT, cursor);
+                if (yesNoBox(cursor, 390, 250, "Download mod for japanese Splatoon 2?") == YES)
+                    download_eu_jp_us(JP_URL, JP_OUTPUT, cursor);
                 break;
 
             case DL_US:
-                if (yesNoBox(cursor, 390, 250, "Download american mod?") == YES)
-                    update_ams_hekate(US_URL, US_OUTPUT, cursor);
-                break;
-
-            case DL_WIP_EU:
-                if (yesNoBox(cursor, 390, 250, "Download work-in-progress european mod?") == YES)
-                    update_ams_hekate(EUWIP_URL, WIPEU_OUTPUT, cursor);
-                break;
-
-            case DL_WIP_JP:
-                if (yesNoBox(cursor, 390, 250, "Download work-in-progress japanese mod?") == YES)
-                    update_ams_hekate(JPWIP_URL, WIPJP_OUTPUT, cursor);
-                break;
-
-            case DL_WIP_US:
-                if (yesNoBox(cursor, 390, 250, "Download work-in-progress american mod?") == YES)
-                    update_ams_hekate(USWIP_URL, WIPUS_OUTPUT, cursor);
+                if (yesNoBox(cursor, 390, 250, "Download mod for american Splatoon 2?") == YES)
+                    download_eu_jp_us(US_URL, US_OUTPUT, cursor);
                 break;
 
             case UP_APP:
@@ -136,7 +123,7 @@ int main(int argc, char **argv)
         }
 
         // exit...
-        if (kDown & KEY_PLUS || (touch.px > 1145 && touch.px < SCREEN_W && touch.py > 675 && touch.py < SCREEN_H))
+        if (kDown & HidNpadButton_Plus || (state.touches[0].x > 1145 && state.touches[0].x < SCREEN_W && state.touches[0].y > 675 && state.touches[0].y < SCREEN_H))
             break;
 
         // lock touch if the user has already touched the screen (touch tap).
