@@ -5,7 +5,7 @@
 #include "touch.h"
 #include "util.h"
 
-#define APP_VERSION "nro-test: 0.1.0"
+#define APP_VERSION "Rainbow-Expansion-Injector v1.0.0!"
 
 void refreshScreen(char loaded)
 {
@@ -29,17 +29,19 @@ void printOptionList(int cursor)
 {
     refreshScreen(/*loaded=*/1);
 
-    char *option_list[]      = {    "Download european mod", \
-                                    "Download japanese mod", \
-                                    "Download american mod", \
-                                    "Update app" };
+    char *option_list[]      = {    "Download the Mod for EUR S2", \
+                                    "Download the Mod for JP S2", \
+                                    "Download the Mod for US S2", \
+                                    "Update the app", \
+                                    "Thank U For Using This Injector :D" };
 
-    char *description_list[] = {    "Downloades the mod for european Splatoon 2", \
-                                    "Downloades the mod for japanese Splatoon 2", \
-                                    "Downloades the mod for american Splatoon 2", \
-                                    "Update app and removes old version" };
+    char *description_list[] = {    "Downloads the Mod for European Splatoon 2", \
+                                    "Downloads the Mod for Japanese Splatoon 2", \
+                                    "Downloads the Mod for American Splatoon 2", \
+                                    "Updates the App and Removes the Old Version", \
+                                    "<3" };
 
-    SDL_Texture *textureArray[] = { ams_icon, ams_plus_icon, hekate_icon, app_icon, reboot_icon };
+    SDL_Texture *textureArray[] = { ams_icon, ams_icon, ams_icon, app_icon, app_icon };
 
     for (int i=0, nl=0; i < (CURSOR_LIST_MAX+1); i++, nl+=NEWLINE)
     {

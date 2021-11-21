@@ -2,12 +2,12 @@
 #define _UTIL_H_
 
 #define ROOT                    "/"
-#define APP_PATH                "/switch/nro-test/"
-#define EU_OUTPUT               "/switch/nro-test/EU.zip"
-#define JP_OUTPUT               "/switch/nro-test/JP.zip"
-#define US_OUTPUT               "/switch/nro-test/US.zip"
-#define APP_OUTPUT              "/switch/nro-test/nro-test.nro"
-#define OLD_APP_PATH            "/switch/nro-test.nro"
+#define APP_PATH                "/switch/Rainbow-Expansion-Injector/"
+#define EU_OUTPUT               "/switch/Rainbow-Expansion-Injector/EU.zip"
+#define JP_OUTPUT               "/switch/Rainbow-Expansion-Injector/JP.zip"
+#define US_OUTPUT               "/switch/Rainbow-Expansion-Injector/US.zip"
+#define APP_OUTPUT              "/switch/Rainbow-Expansion-Injector/Rainbow-Expansion-Injector.nro"
+#define OLD_APP_PATH            "/switch/Rainbow-Expansion-Injector.nro"
 
 #define YES                     10
 #define NO                      20

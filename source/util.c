@@ -7,7 +7,7 @@
 #include "unzip.h"
 #include "download.h"
 
-#define TEMP_FILE                 "/switch/nro-test/temp"
+#define TEMP_FILE                 "/switch/Rainbow-Expansion-Injector/temp"
 #define FILTER_STRING             "browser_download_url\":\""
 #define VERSION_FILTER_STRING     "tag_name\":\""
 
