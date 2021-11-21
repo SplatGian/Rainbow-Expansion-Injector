@@ -101,17 +101,17 @@ int main(int argc, char **argv)
             switch (cursor)
             {
             case DL_EU:
-                if (yesNoBox(cursor, 390, 250, "Download mod for European Splatoon 2?") == YES)
+                if (yesNoBox(cursor, 390, 250, "Download EU mod?") == YES)
                     download_eu_jp_us(EU_URL, EU_OUTPUT, cursor);
                 break;
 
             case DL_JP:
-                if (yesNoBox(cursor, 390, 250, "Download mod for Japanese Splatoon 2?") == YES)
+                if (yesNoBox(cursor, 390, 250, "Download JP mod?") == YES)
                     download_eu_jp_us(JP_URL, JP_OUTPUT, cursor);
                 break;
 
             case DL_US:
-                if (yesNoBox(cursor, 390, 250, "Download mod for American Splatoon 2?") == YES)
+                if (yesNoBox(cursor, 390, 250, "Download US mod?") == YES)
                     download_eu_jp_us(US_URL, US_OUTPUT, cursor);
                 break;
 
